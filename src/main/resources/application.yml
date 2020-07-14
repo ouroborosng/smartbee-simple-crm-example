@@ -1,0 +1,21 @@
+server:
+  port: 8010
+
+spring:
+  jpa:
+    database: H2
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:h2:file:./crm
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+
+logging:
+  config: classpath:log4j2.yml
+
+jwt:
+  # signing key
+  secret: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855

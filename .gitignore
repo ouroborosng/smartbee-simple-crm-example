@@ -1,0 +1,11 @@
+# file: ~/.gitignore_global
+.DS_Store
+.idea
+*.iml
+
+# IntelliJ
+out/
+target/
+
+# log
+log
