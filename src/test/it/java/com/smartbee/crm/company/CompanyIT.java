@@ -2,10 +2,8 @@ package com.smartbee.crm.company;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartbee.crm.base.ITBase;
-import com.smartbee.crm.client.controller.ClientVO;
 import com.smartbee.crm.company.controller.CompanyVO;
 import com.smartbee.crm.company.repo.CrmCompany;
-import com.smartbee.crm.faker.ClientFaker;
 import com.smartbee.crm.faker.CompanyFaker;
 import com.smartbee.crm.security.WithMockUser;
 import org.junit.Assert;

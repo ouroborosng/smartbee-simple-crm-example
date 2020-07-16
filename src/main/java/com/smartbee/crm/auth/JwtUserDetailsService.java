@@ -1,9 +1,9 @@
 package com.smartbee.crm.auth;
 
-import com.smartbee.crm.auth.repo.UserRepository;
 import com.smartbee.crm.auth.repo.CrmPermission;
 import com.smartbee.crm.auth.repo.CrmRole;
 import com.smartbee.crm.auth.repo.CrmUser;
+import com.smartbee.crm.auth.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
