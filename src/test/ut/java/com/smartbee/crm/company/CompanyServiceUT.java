@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -120,6 +121,8 @@ public class CompanyServiceUT {
         verify(mockCompanyRepository).save(companyCaptor.capture());
         assertEquals(userId, companyCaptor.getValue().getCreatedBy());
         assertEquals(userId, companyCaptor.getValue().getUpdatedBy());
+        assertNotNull(companyCaptor.getValue().getCreatedAt());
+        assertNotNull(companyCaptor.getValue().getUpdatedAt());
     }
 
     @Test
@@ -140,6 +143,7 @@ public class CompanyServiceUT {
         verify(mockUserDetailsService).getLoginUser();
         verify(mockCompanyRepository).save(companyCaptor.capture());
         assertEquals(userId, companyCaptor.getValue().getUpdatedBy());
+        assertNotNull(companyCaptor.getValue().getUpdatedAt());
     }
 
     @Test(expected = DataNotFoundException.class)

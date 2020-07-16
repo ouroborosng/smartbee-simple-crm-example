@@ -19,7 +19,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -111,18 +111,25 @@ public class ClientServiceUT {
     @Test
     public void testSaveClient() {
         final UUID userId = UUID.randomUUID();
-        final CrmClient client = ClientFaker.createClient(UUID.randomUUID());
-        final ArgumentCaptor<CrmClient> clientCaptor = ArgumentCaptor.forClass(CrmClient.class);
+        final List<CrmClient> clients = Arrays.asList(
+                ClientFaker.createClient(UUID.randomUUID()),
+                ClientFaker.createClient(UUID.randomUUID())
+        );
+        final ArgumentCaptor<List<CrmClient>> clientCaptor = ArgumentCaptor.forClass(List.class);
         doNothing().when(mockClientValidator).validateCompanyId(any(UUID.class));
         when(mockUserDetailsService.getLoginUser()).thenReturn(userId.toString());
-        when(mockClientRepository.save(any(CrmClient.class))).thenReturn(client);
+        when(mockClientRepository.saveAll(anyList())).thenReturn(clients);
 
-        clientService.saveClient(client);
+        clientService.saveClient(clients);
 
-        verify(mockUserDetailsService).getLoginUser();
-        verify(mockClientRepository).save(clientCaptor.capture());
-        assertEquals(userId, clientCaptor.getValue().getCreatedBy());
-        assertEquals(userId, clientCaptor.getValue().getUpdatedBy());
+        verify(mockUserDetailsService, times(2)).getLoginUser();
+        verify(mockClientRepository).saveAll(clientCaptor.capture());
+        for (final CrmClient client : clientCaptor.getValue()) {
+            assertEquals(userId, client.getCreatedBy());
+            assertEquals(userId, client.getUpdatedBy());
+            assertNotNull(client.getCreatedAt());
+            assertNotNull(client.getUpdatedAt());
+        }
     }
 
     @Test
@@ -144,6 +151,7 @@ public class ClientServiceUT {
         verify(mockUserDetailsService).getLoginUser();
         verify(mockClientRepository).save(clientCaptor.capture());
         assertEquals(userId, clientCaptor.getValue().getUpdatedBy());
+        assertNotNull(clientCaptor.getValue().getUpdatedAt());
     }
 
     @Test(expected = DataNotFoundException.class)

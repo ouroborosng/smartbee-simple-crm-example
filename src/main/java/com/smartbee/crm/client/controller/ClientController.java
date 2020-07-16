@@ -49,12 +49,16 @@ public class ClientController {
 
     @ApiOperation("Create a new client")
     @PostMapping
-    public ResponseEntity<ClientVO> createClient(@RequestBody ClientVO clientVO) {
-        final CrmClient client = ClientVO.convert(clientVO);
-        return new ResponseEntity<>(
-                ClientVO.create(clientService.saveClient(client)),
-                HttpStatus.CREATED
-        );
+    public ResponseEntity<List<ClientVO>> createClient(@RequestBody List<ClientVO> clientVOs) {
+        final List<CrmClient> clients = clientVOs
+                .stream()
+                .map(ClientVO::convert)
+                .collect(Collectors.toList());
+        final List<ClientVO> response = clientService.saveClient(clients)
+                .stream()
+                .map(ClientVO::create)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @ApiOperation("Update existing client")

@@ -1,5 +1,6 @@
 package com.smartbee.crm.client;
 
+import com.google.common.collect.ImmutableList;
 import com.smartbee.crm.auth.JwtUserDetailsService;
 import com.smartbee.crm.client.repo.ClientRepository;
 import com.smartbee.crm.client.repo.CrmClient;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,18 +57,23 @@ public class ClientService {
                 .orElseThrow(() -> new DataNotFoundException(CrmClient.class, id.toString() + " does not found."));
     }
 
-    public CrmClient saveClient(final CrmClient client) {
-        clientValidator.validateCompanyId(client.getCompanyId());
+    public List<CrmClient> saveClient(final List<CrmClient> clients) {
+        final List<CrmClient> savedClients = new ArrayList<>();
+        for (CrmClient client : clients) {
+            clientValidator.validateCompanyId(client.getCompanyId());
 
-        final UUID loginUser = UUID.fromString(userService.getLoginUser());
-        final LocalDateTime now = LocalDateTime.now();
-        client.setId(UUID.randomUUID());
-        client.setCreatedBy(loginUser);
-        client.setCreatedAt(now);
-        client.setUpdatedBy(loginUser);
-        client.setUpdatedAt(now);
+            final UUID loginUser = UUID.fromString(userService.getLoginUser());
+            final LocalDateTime now = LocalDateTime.now();
+            client.setId(UUID.randomUUID());
+            client.setCreatedBy(loginUser);
+            client.setCreatedAt(now);
+            client.setUpdatedBy(loginUser);
+            client.setUpdatedAt(now);
 
-        return clientRepository.save(client);
+            savedClients.add(client);
+        }
+
+        return ImmutableList.copyOf(clientRepository.saveAll(savedClients));
     }
 
     public CrmClient updateClient(final CrmClient updatedClient) {

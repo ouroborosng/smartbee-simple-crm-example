@@ -4,6 +4,7 @@ import com.smartbee.crm.client.ClientService;
 import com.smartbee.crm.client.repo.CrmClient;
 import com.smartbee.crm.company.CompanyService;
 import com.smartbee.crm.company.repo.CrmCompany;
+import com.smartbee.crm.exception.DataNotFoundException;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -45,6 +50,9 @@ public class ITBase {
     }
 
     protected CrmClient createClient(final CrmClient client) {
-        return clientService.saveClient(client);
+        return clientService.saveClient(Collections.singletonList(client))
+                .stream()
+                .findAny()
+                .get();
     }
 }
