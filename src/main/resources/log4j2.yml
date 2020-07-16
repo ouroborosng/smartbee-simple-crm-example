@@ -38,8 +38,8 @@ Configuration:
           TimeBasedTriggeringPolicy:
             modulate: true
             interval: 1
-          DefaultRolloverStrategy:
-            max: 100
+        DefaultRolloverStrategy:
+          max: 100
 
   Loggers:
     Root:
