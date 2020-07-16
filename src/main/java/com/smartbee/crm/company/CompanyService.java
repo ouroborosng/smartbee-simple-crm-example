@@ -39,6 +39,9 @@ public class CompanyService {
                     .stream().collect(Collectors.toCollection(() -> companies));
         }
 
+        companies.stream().findAny().orElseThrow(() ->
+                new DataNotFoundException(CrmCompany.class, "company name " + name + " does not find any match."));
+
         return companies;
     }
 

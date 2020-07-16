@@ -44,6 +44,9 @@ public class ClientService {
                     .stream().collect(Collectors.toCollection(() -> clients));
         }
 
+        clients.stream().findAny().orElseThrow(() ->
+                new DataNotFoundException(CrmClient.class, "client name " + name + " does not found any match."));
+
         return clients;
     }
 

@@ -17,10 +17,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,6 +78,17 @@ public class ClientServiceUT {
 
         verify(mockClientRepository).findByName(anyString(), any(PageRequest.class));
         assertEquals(5, response.size());
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void testFindNotExistsClientName() {
+        final int page = 0;
+        final int size = 5;
+        final PageImpl<CrmClient> pages = new PageImpl(Collections.emptyList());
+        PowerMockito.spy(PageRequest.of(page, size));
+        when(mockClientRepository.findByName(anyString(), any())).thenReturn(pages);
+
+        clientService.findClientByName("", page, size);
     }
 
     @Test

@@ -16,10 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,6 +75,18 @@ public class CompanyServiceUT {
 
         verify(mockCompanyRepository).findByName(anyString(), any(PageRequest.class));
         assertEquals(5, response.size());
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void testFindNotExistsCompanyName() {
+        final int page = 0;
+        final int size = 1;
+        when(mockCompanyRepository.findByName(anyString())).thenReturn(Optional.empty());
+        final PageImpl<CrmCompany> pages = new PageImpl(Collections.emptyList());
+        PowerMockito.spy(PageRequest.of(page, size));
+        when(mockCompanyRepository.findByName(anyString(), any())).thenReturn(pages);
+
+        companyService.findCompanyByName("", page, size);
     }
 
     @Test
