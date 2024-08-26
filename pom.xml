@@ -18,7 +18,7 @@
         <docker.image.prefix>smartbee</docker.image.prefix>
         <lombok.version>1.18.12</lombok.version>
         <jjwt.version>0.11.2</jjwt.version>
-        <springfox.version>2.9.2</springfox.version>
+        <springfox.version>2.10.0</springfox.version>
         <powermock.version>2.0.7</powermock.version>
         <javafaker.version>1.0.2</javafaker.version>
         <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
